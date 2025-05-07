@@ -1,3 +1,3 @@
-## N-Body Simulation
+# N-Body Simulation
 
-# WORK IN PROGRESS
+## WORK IN PROGRESS
