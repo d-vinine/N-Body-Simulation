@@ -22,7 +22,7 @@ void sim_init_uniform(BodyData *data, float min_x, float max_x, float min_y,
 void sim_init_galaxy(BodyData *data, SimulationParams params, int start_idx,
                      int count, float total_mass, float central_mass_percentage,
                      float scale_length, float center_x, float center_y,
-                     float velocity_x, float velocity_y) {
+                     float velocity_x, float velocity_y, float temp) {
 
   // Set up the central massive particle first
   float central_mass = total_mass * central_mass_percentage;
@@ -75,8 +75,8 @@ void sim_init_galaxy(BodyData *data, SimulationParams params, int start_idx,
                         (r + 0.1)); // +0.1 prevents division by zero
 
     // Velocity components with dispersion
-    float sigma_r = v_circ * 0.2; // Radial velocity dispersion
-    float sigma_t = v_circ * 0.1; // Tangential velocity dispersion
+    float sigma_r = temp * v_circ * 0.2; // Radial velocity dispersion
+    float sigma_t = temp * v_circ * 0.1; // Tangential velocity dispersion
 
     // Base circular motion + random components
     data->vx[idx] = velocity_x - v_circ * sin(theta) +

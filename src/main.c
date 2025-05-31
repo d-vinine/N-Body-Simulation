@@ -4,15 +4,15 @@
 #include <raylib.h>
 
 void init_sim(const SimulationCore *core) {
-  sim_init_galaxy(core->bodies, core->params, 0, core->bodies->count, 6e3, 0.4,
-                  50, 200, 200, 0, 0);
+  sim_init_galaxy(core->bodies, core->params, 0, core->bodies->count, 5e3, 0.02,
+                  100, 400, 400, 0, 0, 0.1);
 
   // sim_init_uniform(core->bodies, 0, 200, 0, 200, 2);
   sim_core_init_leapfrog((SimulationCore *)core);
 }
 
 int main(void) {
-  SimulationParams params = {.body_count = 40000,
+  SimulationParams params = {.body_count = 50000,
                              .thread_count = 50,
                              .G = 0.1,
                              .eps = 0.1,
@@ -23,10 +23,10 @@ int main(void) {
   init_sim(core);
 
   InitWindow(800, 800, "N-Body Sim");
-  SetTargetFPS(600);
+  SetTargetFPS(6000);
 
   Camera2D cam = {0};
-  cam.zoom = 0.4f;
+  cam.zoom = 1.0f;
 
   while (!WindowShouldClose()) {
     sim_core_step(core);
