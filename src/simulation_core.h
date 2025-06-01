@@ -9,7 +9,7 @@
 typedef struct SimulationCore {
   BodyData *bodies;
   SimulationParams params;
-  QuadTreeNode *tree;
+
   Throol *throol;
 } SimulationCore;
 

@@ -2,15 +2,6 @@
 #include "math.h"
 #include "stdlib.h"
 
-float fast_inv_sqrt(float x) {
-  float xhalf = 0.5f * x;
-  int i = *(int *)&x;        // Use int, not long long
-  i = 0x5f3759df - (i >> 1); // Correct magic number for float
-  x = *(float *)&i;
-  x = x * (1.5f - xhalf * x * x); // Newton iteration
-  return x;
-}
-
 float gaussian_random() {
   static int has_spare = 0;
   static float spare;
