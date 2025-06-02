@@ -12,7 +12,6 @@ QuadTreeError qt_add_node(QuadTree *qt, QuadTreeNode node);
 
 QuadTreeError qt_subdivide(QuadTree *qt, QuadTreeNode *node);
 
-
 QuadTree *qt_create(int node_capacity) {
   QuadTree *ret = malloc(sizeof(QuadTree));
   if (!ret) {
@@ -54,8 +53,8 @@ QuadTreeError qt_set(QuadTree *qt, float max_x, float max_y, float min_x,
   qt->nodes[0].s_y = (max_y + min_y) / 2;
 
   // Setting centre of mass equal to quad centre (default empty node)
-  qt->nodes[0].c_x = qt->nodes[0].c_x;
-  qt->nodes[0].c_y = qt->nodes[0].c_y;
+  qt->nodes[0].c_x = qt->nodes[0].s_x;
+  qt->nodes[0].c_y = qt->nodes[0].s_y;
   qt->nodes[0].mass = 0;
 
   // Setting first child to 0 and adding root node
@@ -101,24 +100,25 @@ QuadTreeError qt_insert(QuadTree *qt, float x, float y, float mass) {
   float old_y = curr_node->c_y;
   float old_mass = curr_node->mass;
 
-  int old_child_idx =
-      curr_node->first_child + qt_get_child(curr_node, old_x, old_y);
-  int child_idx = curr_node->first_child + qt_get_child(curr_node, x, y);
+  int old_child_idx, child_idx;
 
-  // Subdividing until the old and the new body end up in different nodes
-  while (old_child_idx == child_idx) {
+  do {
     QuadTreeError err = qt_subdivide(qt, curr_node);
     if (err != QT_SUCCESS) {
       return err;
     }
 
     curr_node->mass = 0;
-    curr_node = &qt->nodes[old_child_idx];
+    curr_node->c_x = curr_node->s_x;
+    curr_node->c_y = curr_node->s_y;
 
     old_child_idx =
         curr_node->first_child + qt_get_child(curr_node, old_x, old_y);
     child_idx = curr_node->first_child + qt_get_child(curr_node, x, y);
-  }
+
+    curr_node = &qt->nodes[old_child_idx];
+
+  } while (old_child_idx == child_idx);
 
   // Adding old body
   qt->nodes[old_child_idx].c_x = old_x;
@@ -175,6 +175,8 @@ QuadTreeError qt_subdivide(QuadTree *qt, QuadTreeNode *node) {
     return QT_INVALID_POINTER;
   }
 
+  node->first_child = qt->node_count;
+
   QuadTreeNode child;
   for (int i = 0; i < 4; i++) {
 
@@ -198,7 +200,7 @@ QuadTreeError qt_subdivide(QuadTree *qt, QuadTreeNode *node) {
     child.c_y = child.s_y;
     child.mass = 0;
 
-    // Setting first child = 0
+    // Setting the first child = 0
     child.first_child = 0;
 
     QuadTreeError err = qt_add_node(qt, child);
