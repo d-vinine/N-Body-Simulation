@@ -4,15 +4,15 @@
 #include <raylib.h>
 
 void init_sim(const SimulationCore *core) {
-  sim_init_galaxy(core->bodies, core->params, 0, core->bodies->count, 5e3, 50,
-                  400, 400, 0, 0, 1);
+  sim_init_galaxy(core->bodies, core->params, 0, core->bodies->count, 1e3, 20,
+                  400, 400, 0, 0, 1.2);
 
   // sim_init_uniform(core->bodies, 0, 200, 0, 200, 2);
   sim_core_init_leapfrog((SimulationCore *)core);
 }
 
 int main(void) {
-  SimulationParams params = {.body_count = 60000, 
+  SimulationParams params = {.body_count = 20000, 
                              .thread_count = 50,
                              .G = 0.1,
                              .eps = 0.1,

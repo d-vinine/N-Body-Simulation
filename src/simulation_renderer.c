@@ -27,7 +27,7 @@ void sim_render_frame(const SimulationCore *core, Camera2D *cam,
   ClearBackground((Color){15, 15, 25, 255});
 
   BeginMode2D(*cam);
-  for (int i = 0; i < core->bodies->count; i++) {
+  for (int i = 10000; i < core->bodies->count; i++) {
     Color particle_color = (Color){255, 233, 200, 10};
     DrawPixel(core->bodies->x[i], core->bodies->y[i], particle_color);
   }
