@@ -10,10 +10,10 @@ typedef struct SimulationCore {
   BodyData *bodies;
   SimulationParams params;
 
-  Throol *throol;
+  QuadTree *qt;
 } SimulationCore;
 
-SimulationCore *sim_core_create(const SimulationParams params);
+SimulationCore *sim_core_create(SimulationParams params, int qt_node_capacity);
 void sim_core_destroy(SimulationCore *core);
 
 // Physics-only functions

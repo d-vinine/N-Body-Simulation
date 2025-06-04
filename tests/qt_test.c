@@ -10,16 +10,25 @@ void qt_draw(QuadTree *qt) {
     float y = qt->nodes[i].s_y - qt->nodes[i].size * 0.5 + padding;
     float size = qt->nodes[i].size - padding;
 
-    DrawRectangleLines(x, y, size, size, WHITE);
+    DrawRectangleLines(x, y, size, size, (Color){255, 255, 255, 100});
+    DrawLine(qt->nodes[i].s_x, qt->nodes[i].s_y,
+             qt->nodes[qt->nodes[i].next].s_x,
+             qt->nodes[qt->nodes[i].next].s_y, GREEN);
 
     if (qt->nodes[i].mass > 0) {
-      DrawCircle(qt->nodes[i].c_x, qt->nodes[i].c_y, 2, RED);
+      Color circ_color;
+      if (i == 0) {
+        circ_color = BLUE;
+      } else {
+        circ_color = RED;
+      }
+      DrawCircle(qt->nodes[i].c_x, qt->nodes[i].c_y, 2, circ_color);
     }
   }
 }
 
 int main(void) {
-  QuadTree *qt = qt_create(1024);
+  QuadTree *qt = qt_create(5);
   qt_set(qt, 700, 700, 100, 100);
 
   InitWindow(800, 800, "QuadTree Test");
@@ -32,6 +41,7 @@ int main(void) {
       float y = GetMouseY();
 
       qt_insert(qt, x, y, 1);
+      qt_propagate(qt);
     }
 
     BeginDrawing();
