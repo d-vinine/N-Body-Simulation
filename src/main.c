@@ -4,10 +4,10 @@
 #include <raylib.h>
 
 void init_sim(const SimulationCore *core) {
-  sim_init_galaxy(core->bodies, core->params, 0, core->bodies->count, 1e3, 20,
-                  400, 400, 0, 0, 1.2);
+ // sim_init_galaxy(core->bodies, core->params, 0, core->bodies->count, 1e3, 20,
+  //                400, 400, 0, 0, 1.2);
 
-  // sim_init_uniform(core->bodies, 0, 200, 0, 200, 2);
+  sim_init_uniform(core->bodies, 0, 200, 0, 200, 2);
   sim_core_init_leapfrog((SimulationCore *)core);
 }
 
@@ -18,7 +18,7 @@ int main(void) {
                              .dt = 0.001,
                              .theta = 0.5};
 
-  SimulationCore *core = sim_core_create(params, 10);
+  SimulationCore *core = sim_core_create(params, 1024);
   init_sim(core);
 
   InitWindow(800, 800, "N-Body Sim");

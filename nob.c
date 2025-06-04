@@ -6,7 +6,7 @@
 
 #define COMPILER "gcc"
 
-void flags(Nob_Cmd *cmd) { nob_cmd_append(cmd, "-O3", "-lm", "-lraylib", "-pg"); }
+void flags(Nob_Cmd *cmd) { nob_cmd_append(cmd, "-O3", "-lm", "-lraylib"); }
 
 void source(Nob_Cmd *cmd) {
   Nob_File_Paths *children = malloc(sizeof(Nob_File_Paths));
