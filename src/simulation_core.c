@@ -47,9 +47,14 @@ void sim_core_init_leapfrog(SimulationCore *core) {
   }
 
   qt_propagate(core->qt);
+
+  float *acc;
   for (int i = 0; i < bodies->count; i++) {
-    qt_acc(core->qt, bodies->x[i], bodies->y[i], core->params.theta,
-           core->params.eps, core->params.G, &bodies->ax[i], &bodies->ay[i]);
+    acc = qt_acc(core->qt, bodies->x[i], bodies->y[i], core->params.theta,
+                 core->params.eps, core->params.G);
+
+    bodies->ax[i] = acc[0];
+    bodies->ay[i] = acc[1];
   }
 
   for (int i = 0; i < bodies->count; i++) {
@@ -80,16 +85,16 @@ void sim_core_step(SimulationCore *core) {
   for (int i = 0; i < bodies->count; i++) {
     qt_insert(core->qt, bodies->x[i], bodies->y[i], bodies->mass[i]);
   }
-  for (int i = 0; i < bodies->count; i++) {
-    qt_acc(core->qt, bodies->x[i], bodies->y[i], core->params.theta,
-           core->params.eps, core->params.G, &bodies->ax[i], &bodies->ay[i]);
-  }
 
   qt_propagate(core->qt);
 
+  float *acc;
   for (int i = 0; i < bodies->count; i++) {
-    qt_acc(core->qt, bodies->x[i], bodies->y[i], core->params.theta,
-           core->params.eps, core->params.G, &bodies->ax[i], &bodies->ay[i]);
+    acc = qt_acc(core->qt, bodies->x[i], bodies->y[i], core->params.theta,
+                 core->params.eps, core->params.G);
+
+    bodies->ax[i] = acc[0];
+    bodies->ay[i] = acc[1];
   }
 
   for (int i = 0; i < bodies->count; i++) {

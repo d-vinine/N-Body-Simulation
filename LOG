@@ -3,25 +3,25 @@ Flat profile:
 Each sample counts as 0.01 seconds.
   %   cumulative   self              self     total           
  time   seconds   seconds    calls  ms/call  ms/call  name    
- 97.78     18.91    18.91  5530000     0.00     0.00  qt_acc
-  2.07     19.31     0.40  2770000     0.00     0.00  qt_insert
-  0.10     19.33     0.02      276     0.07    69.98  sim_core_step
-  0.05     19.34     0.01  2040046     0.00     0.00  gaussian_random
-  0.05     19.35     0.01      277     0.04     0.04  qt_propagate
-  0.00     19.35     0.00      277     0.00     0.00  qt_set
-  0.00     19.35     0.00      276     0.00     0.00  sim_render_frame
-  0.00     19.35     0.00        1     0.00     0.00  body_data_create
-  0.00     19.35     0.00        1     0.00     0.00  body_data_destroy
-  0.00     19.35     0.00        1     0.00     0.15  init_sim
-  0.00     19.35     0.00        1     0.00     0.00  qt_create
-  0.00     19.35     0.00        1     0.00     0.00  qt_destroy
-  0.00     19.35     0.00        1     0.00     0.00  sim_core_create
-  0.00     19.35     0.00        1     0.00     0.00  sim_core_destroy
-  0.00     19.35     0.00        1     0.00    35.71  sim_core_init_leapfrog
-  0.00     19.35     0.00        1     0.00     0.02  sim_init_bulge
-  0.00     19.35     0.00        1     0.00     0.08  sim_init_disk
-  0.00     19.35     0.00        1     0.00     0.15  sim_init_galaxy
-  0.00     19.35     0.00        1     0.00     0.05  sim_init_halo
+ 95.34     14.16    14.16  4040000     0.00     0.00  qt_acc
+  3.91     14.74     0.58  4040000     0.00     0.00  qt_insert
+  0.40     14.80     0.06  2964979     0.00     0.00  gaussian_random
+  0.40     14.86     0.06      403     0.15    36.78  sim_core_step
+  0.00     14.86     0.00      404     0.00     0.00  qt_propagate
+  0.00     14.86     0.00      404     0.00     0.00  qt_set
+  0.00     14.86     0.00      403     0.00     0.00  sim_render_frame
+  0.00     14.86     0.00        1     0.00     0.00  body_data_create
+  0.00     14.86     0.00        1     0.00     0.00  body_data_destroy
+  0.00     14.86     0.00        1     0.00     0.61  init_sim
+  0.00     14.86     0.00        1     0.00     0.00  qt_create
+  0.00     14.86     0.00        1     0.00     0.00  qt_destroy
+  0.00     14.86     0.00        1     0.00     0.00  sim_core_create
+  0.00     14.86     0.00        1     0.00     0.00  sim_core_destroy
+  0.00     14.86     0.00        1     0.00    36.63  sim_core_init_leapfrog
+  0.00     14.86     0.00        1     0.00     0.08  sim_init_bulge
+  0.00     14.86     0.00        1     0.00     0.32  sim_init_disk
+  0.00     14.86     0.00        1     0.00     0.61  sim_init_galaxy
+  0.00     14.86     0.00        1     0.00     0.20  sim_init_halo
 
  %         the percentage of the total running time of the
 time       program used by this function.
@@ -59,79 +59,79 @@ notice and this notice are preserved.
 		     Call graph (explanation follows)
 
 
-granularity: each sample hit covers 2 byte(s) for 0.05% of 19.35 seconds
+granularity: each sample hit covers 2 byte(s) for 0.07% of 14.86 seconds
 
 index % time    self  children    called     name
                                                  <spontaneous>
-[1]    100.0    0.00   19.35                 main [1]
-                0.02   19.30     276/276         sim_core_step [2]
-                0.00    0.04       1/1           sim_core_init_leapfrog [5]
-                0.00    0.00       1/1           init_sim [8]
-                0.00    0.00     276/276         sim_render_frame [14]
+[1]    100.0    0.00   14.86                 main [1]
+                0.06   14.76     403/403         sim_core_step [2]
+                0.00    0.04       1/1           sim_core_init_leapfrog [6]
+                0.00    0.00       1/1           init_sim [7]
+                0.00    0.00     403/403         sim_render_frame [14]
                 0.00    0.00       1/1           sim_core_create [19]
                 0.00    0.00       1/1           sim_core_destroy [20]
 -----------------------------------------------
-                0.02   19.30     276/276         main [1]
-[2]     99.8    0.02   19.30     276         sim_core_step [2]
-               18.88    0.00 5520000/5530000     qt_acc [3]
-                0.40    0.01 2760000/2770000     qt_insert [4]
-                0.01    0.00     276/277         qt_propagate [7]
-                0.00    0.00     276/277         qt_set [13]
+                0.06   14.76     403/403         main [1]
+[2]     99.7    0.06   14.76     403         sim_core_step [2]
+               14.12    0.00 4030000/4040000     qt_acc [3]
+                0.58    0.06 4030000/4040000     qt_insert [4]
+                0.00    0.00     403/404         qt_set [13]
+                0.00    0.00     403/404         qt_propagate [12]
 -----------------------------------------------
-                0.03    0.00   10000/5530000     sim_core_init_leapfrog [5]
-               18.88    0.00 5520000/5530000     sim_core_step [2]
-[3]     97.7   18.91    0.00 5530000         qt_acc [3]
+                0.04    0.00   10000/4040000     sim_core_init_leapfrog [6]
+               14.12    0.00 4030000/4040000     sim_core_step [2]
+[3]     95.3   14.16    0.00 4040000         qt_acc [3]
 -----------------------------------------------
-                0.00    0.00   10000/2770000     sim_core_init_leapfrog [5]
-                0.40    0.01 2760000/2770000     sim_core_step [2]
-[4]      2.1    0.40    0.01 2770000         qt_insert [4]
-                0.01    0.00 2010048/2040046     gaussian_random [6]
+                0.00    0.00   10000/4040000     sim_core_init_leapfrog [6]
+                0.58    0.06 4030000/4040000     sim_core_step [2]
+[4]      4.3    0.58    0.06 4040000         qt_insert [4]
+                0.06    0.00 2934981/2964979     gaussian_random [5]
+-----------------------------------------------
+                0.00    0.00    4004/2964979     sim_init_bulge [11]
+                0.00    0.00    9998/2964979     sim_init_halo [10]
+                0.00    0.00   15996/2964979     sim_init_disk [9]
+                0.06    0.00 2934981/2964979     qt_insert [4]
+[5]      0.4    0.06    0.00 2964979         gaussian_random [5]
 -----------------------------------------------
                 0.00    0.04       1/1           main [1]
-[5]      0.2    0.00    0.04       1         sim_core_init_leapfrog [5]
-                0.03    0.00   10000/5530000     qt_acc [3]
-                0.00    0.00   10000/2770000     qt_insert [4]
-                0.00    0.00       1/277         qt_propagate [7]
-                0.00    0.00       1/277         qt_set [13]
------------------------------------------------
-                0.00    0.00    4004/2040046     sim_init_bulge [12]
-                0.00    0.00    9998/2040046     sim_init_halo [11]
-                0.00    0.00   15996/2040046     sim_init_disk [10]
-                0.01    0.00 2010048/2040046     qt_insert [4]
-[6]      0.1    0.01    0.00 2040046         gaussian_random [6]
------------------------------------------------
-                0.00    0.00       1/277         sim_core_init_leapfrog [5]
-                0.01    0.00     276/277         sim_core_step [2]
-[7]      0.1    0.01    0.00     277         qt_propagate [7]
+[6]      0.2    0.00    0.04       1         sim_core_init_leapfrog [6]
+                0.04    0.00   10000/4040000     qt_acc [3]
+                0.00    0.00   10000/4040000     qt_insert [4]
+                0.00    0.00       1/404         qt_set [13]
+                0.00    0.00       1/404         qt_propagate [12]
 -----------------------------------------------
                 0.00    0.00       1/1           main [1]
-[8]      0.0    0.00    0.00       1         init_sim [8]
-                0.00    0.00       1/1           sim_init_galaxy [9]
+[7]      0.0    0.00    0.00       1         init_sim [7]
+                0.00    0.00       1/1           sim_init_galaxy [8]
 -----------------------------------------------
-                0.00    0.00       1/1           init_sim [8]
-[9]      0.0    0.00    0.00       1         sim_init_galaxy [9]
-                0.00    0.00       1/1           sim_init_disk [10]
-                0.00    0.00       1/1           sim_init_halo [11]
-                0.00    0.00       1/1           sim_init_bulge [12]
+                0.00    0.00       1/1           init_sim [7]
+[8]      0.0    0.00    0.00       1         sim_init_galaxy [8]
+                0.00    0.00       1/1           sim_init_disk [9]
+                0.00    0.00       1/1           sim_init_halo [10]
+                0.00    0.00       1/1           sim_init_bulge [11]
 -----------------------------------------------
-                0.00    0.00       1/1           sim_init_galaxy [9]
-[10]     0.0    0.00    0.00       1         sim_init_disk [10]
-                0.00    0.00   15996/2040046     gaussian_random [6]
+                0.00    0.00       1/1           sim_init_galaxy [8]
+[9]      0.0    0.00    0.00       1         sim_init_disk [9]
+                0.00    0.00   15996/2964979     gaussian_random [5]
 -----------------------------------------------
-                0.00    0.00       1/1           sim_init_galaxy [9]
-[11]     0.0    0.00    0.00       1         sim_init_halo [11]
-                0.00    0.00    9998/2040046     gaussian_random [6]
+                0.00    0.00       1/1           sim_init_galaxy [8]
+[10]     0.0    0.00    0.00       1         sim_init_halo [10]
+                0.00    0.00    9998/2964979     gaussian_random [5]
 -----------------------------------------------
-                0.00    0.00       1/1           sim_init_galaxy [9]
-[12]     0.0    0.00    0.00       1         sim_init_bulge [12]
-                0.00    0.00    4004/2040046     gaussian_random [6]
+                0.00    0.00       1/1           sim_init_galaxy [8]
+[11]     0.0    0.00    0.00       1         sim_init_bulge [11]
+                0.00    0.00    4004/2964979     gaussian_random [5]
 -----------------------------------------------
-                0.00    0.00       1/277         sim_core_init_leapfrog [5]
-                0.00    0.00     276/277         sim_core_step [2]
-[13]     0.0    0.00    0.00     277         qt_set [13]
+                0.00    0.00       1/404         sim_core_init_leapfrog [6]
+                0.00    0.00     403/404         sim_core_step [2]
+[12]     0.0    0.00    0.00     404         qt_propagate [12]
 -----------------------------------------------
-                0.00    0.00     276/276         main [1]
-[14]     0.0    0.00    0.00     276         sim_render_frame [14]
+                0.00    0.00       1/404         sim_core_init_leapfrog [6]
+                0.00    0.00     403/404         sim_core_step [2]
+[13]     0.0    0.00    0.00     404         qt_set [13]
+-----------------------------------------------
+                0.00    0.00     403/403         main [1]
+[14]     0.0    0.00    0.00     403         sim_render_frame [14]
 -----------------------------------------------
                 0.00    0.00       1/1           sim_core_create [19]
 [15]     0.0    0.00    0.00       1         body_data_create [15]
@@ -246,10 +246,10 @@ notice and this notice are preserved.
 
 Index by function name
 
-  [15] body_data_create        [4] qt_insert              [12] sim_init_bulge
-  [16] body_data_destroy       [7] qt_propagate           [10] sim_init_disk
-   [6] gaussian_random        [13] qt_set                  [9] sim_init_galaxy
-   [8] init_sim               [19] sim_core_create        [11] sim_init_halo
+  [15] body_data_create        [4] qt_insert              [11] sim_init_bulge
+  [16] body_data_destroy      [12] qt_propagate            [9] sim_init_disk
+   [5] gaussian_random        [13] qt_set                  [8] sim_init_galaxy
+   [7] init_sim               [19] sim_core_create        [10] sim_init_halo
    [3] qt_acc                 [20] sim_core_destroy       [14] sim_render_frame
-  [17] qt_create               [5] sim_core_init_leapfrog
+  [17] qt_create               [6] sim_core_init_leapfrog
   [18] qt_destroy              [2] sim_core_step

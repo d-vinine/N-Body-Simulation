@@ -189,14 +189,9 @@ QuadTreeError qt_propagate(QuadTree *qt) {
   return QT_SUCCESS;
 }
 
-QuadTreeError qt_acc(QuadTree *qt, float x, float y, float theta, float eps,
-                     float G, float *ax, float *ay) {
-  if (!qt) {
-    return QT_INVALID_POINTER;
-  }
+float *qt_acc(QuadTree *qt, float x, float y, float theta, float eps, float G) {
 
-  *ax = 0;
-  *ay = 0;
+  float *acc = calloc(2, sizeof(float));
 
   float theta2 = theta * theta;
   float eps2 = eps * eps;
@@ -218,8 +213,8 @@ QuadTreeError qt_acc(QuadTree *qt, float x, float y, float theta, float eps,
       float inv_dist3 = inv_dist * inv_dist * inv_dist;
       float a = G * curr_node->mass * inv_dist3;
 
-      *ax += a * dx;
-      *ay += a * dy;
+      acc[0] += a * dx;
+      acc[1] += a * dy;
 
       if (curr_node->next == 0) {
         break;
@@ -230,7 +225,7 @@ QuadTreeError qt_acc(QuadTree *qt, float x, float y, float theta, float eps,
     }
   }
 
-  return QT_SUCCESS;
+  return acc;
 }
 
 // Helper functions
