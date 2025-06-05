@@ -6,7 +6,9 @@
 
 #define COMPILER "gcc"
 
-void flags(Nob_Cmd *cmd) { nob_cmd_append(cmd, "-O3", "-lm", "-lraylib"); }
+void flags(Nob_Cmd *cmd) {
+  nob_cmd_append(cmd, "-O3", "-lm", "-lraylib", "-fopenmp");
+}
 
 void source(Nob_Cmd *cmd) {
   Nob_File_Paths *children = malloc(sizeof(Nob_File_Paths));
@@ -30,6 +32,7 @@ int main(int argc, char **argv) {
   nob_mkdir_if_not_exists(BUILD_DIR);
 
   Nob_Cmd cmd = {0};
+
   nob_cmd_append(&cmd, COMPILER, "-o", BUILD_DIR "main");
 
   source(&cmd);

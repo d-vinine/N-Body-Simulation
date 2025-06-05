@@ -1,10 +1,10 @@
 #include "quadtree.h"
-#include <stdio.h>
 #define THROOL_IMPLEMENTATION
 #include "body_data.h"
 #include "simulation_core.h"
 #include "simulation_interface.h"
 #include <math.h>
+#include <omp.h>
 
 SimulationCore *sim_core_create(const SimulationParams params,
                                 int qt_node_capacity) {
@@ -48,13 +48,10 @@ void sim_core_init_leapfrog(SimulationCore *core) {
 
   qt_propagate(core->qt);
 
-  float *acc;
+  #pragma omp parallel for
   for (int i = 0; i < bodies->count; i++) {
-    acc = qt_acc(core->qt, bodies->x[i], bodies->y[i], core->params.theta,
-                 core->params.eps, core->params.G);
-
-    bodies->ax[i] = acc[0];
-    bodies->ay[i] = acc[1];
+    qt_acc(core->qt, bodies->x[i], bodies->y[i], core->params.theta,
+           core->params.eps, core->params.G, &bodies->ax[i], &bodies->ay[i]);
   }
 
   for (int i = 0; i < bodies->count; i++) {
@@ -80,6 +77,11 @@ void sim_core_step(SimulationCore *core) {
       min_y = bodies->y[i];
   }
 
+  for (int i = 0; i < bodies->count; i++) {
+    bodies->x[i] += bodies->vx[i] * core->params.dt;
+    bodies->y[i] += bodies->vy[i] * core->params.dt;
+  }
+
   qt_set(core->qt, max_x, max_y, min_x, min_y);
 
   for (int i = 0; i < bodies->count; i++) {
@@ -88,13 +90,10 @@ void sim_core_step(SimulationCore *core) {
 
   qt_propagate(core->qt);
 
-  float *acc;
+  #pragma omp parallel for
   for (int i = 0; i < bodies->count; i++) {
-    acc = qt_acc(core->qt, bodies->x[i], bodies->y[i], core->params.theta,
-                 core->params.eps, core->params.G);
-
-    bodies->ax[i] = acc[0];
-    bodies->ay[i] = acc[1];
+    qt_acc(core->qt, bodies->x[i], bodies->y[i], core->params.theta,
+           core->params.eps, core->params.G, &bodies->ax[i], &bodies->ay[i]);
   }
 
   for (int i = 0; i < bodies->count; i++) {

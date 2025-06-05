@@ -1,7 +1,6 @@
 #include "simulation_renderer.h"
 #include "simulation_core.h"
 #include <raymath.h>
-#include <stdio.h>
 
 void sim_render_frame(const SimulationCore *core, Camera2D *cam,
                       void init_sim(const SimulationCore *core)) {
@@ -33,6 +32,5 @@ void sim_render_frame(const SimulationCore *core, Camera2D *cam,
     DrawPixel(core->bodies->x[i], core->bodies->y[i], particle_color);
   }
   EndMode2D();
-  printf("FPS: %d\n", GetFPS());
   EndDrawing();
 }
