@@ -9,7 +9,6 @@ typedef struct SimulationParams {
   float dt;         // Time step
   float theta;      // BH opening angle
   int body_count;   // Number of bodies
-  int thread_count; // Thread count
 } SimulationParams;
 
 // Pure initialization functions

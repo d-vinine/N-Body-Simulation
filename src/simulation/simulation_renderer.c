@@ -32,6 +32,5 @@ void sim_render_frame(const SimulationCore *core, Camera2D *cam,
     DrawPixel(core->bodies->x[i], core->bodies->y[i], particle_color);
   }
   EndMode2D();
-
   EndDrawing();
 }
