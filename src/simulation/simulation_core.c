@@ -97,9 +97,6 @@ void sim_core_step(SimulationCore *core) {
   }
 
   for (int i = 0; i < bodies->count; i++) {
-    bodies->x[i] += bodies->vx[i] * core->params.dt;
-    bodies->y[i] += bodies->vy[i] * core->params.dt;
-
     bodies->vx[i] += bodies->ax[i] * core->params.dt;
     bodies->vy[i] += bodies->ay[i] * core->params.dt;
   }

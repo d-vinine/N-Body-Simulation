@@ -17,7 +17,7 @@ void init_sim(const SimulationCore *core) {
 }
 
 int main(void) {
-  SimulationParams params = {.body_count = 10000, 
+  SimulationParams params = {.body_count = 60000, 
                              .G = 0.1,
                              .eps = 0.5,
                              .dt = 0.01,
