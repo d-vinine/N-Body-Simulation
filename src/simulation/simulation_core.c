@@ -1,9 +1,9 @@
 #include "quadtree.h"
-#define THROOL_IMPLEMENTATION
 #include "body_data.h"
 #include "simulation_core.h"
 #include "simulation_interface.h"
 #include <math.h>
+#include <stdlib.h>
 #include <omp.h>
 
 SimulationCore *sim_core_create(const SimulationParams params,

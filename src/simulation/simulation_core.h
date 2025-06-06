@@ -1,7 +1,6 @@
 #ifndef SIMULATION_CORE_H
 #define SIMULATION_CORE_H
 
-#include "throol.h"
 #include "body_data.h"
 #include "quadtree.h"
 #include "simulation_interface.h"
