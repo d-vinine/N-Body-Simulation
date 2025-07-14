@@ -8,13 +8,6 @@ This project is a 2D N-body simulation that uses the **Barnes-Hut algorithm** to
 - **C compiler** 
 - **Make** (optional, for building)
 
-## Controls
-
-- **W/A/S/D or Arrow keys** — Move camera
-- **Scroll Wheel** — Zoom in/out
-- **R** — Reset simulation
-- **P** — Pause/Resume simulation
-
 ## Barnes-Hut Algorithm (Brief Overview)
 
 Instead of computing forces between every pair of particles (which is O(N²)), Barnes-Hut organizes particles into a quadtree. Each node approximates the mass of all particles within it. When calculating forces, distant nodes are treated as a single body, reducing the number of computations significantly.

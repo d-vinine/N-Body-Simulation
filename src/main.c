@@ -7,16 +7,19 @@
 #define FPS 600
 
 void init_sim(const SimulationCore *core) {
-  float total_mass = 1e6;
-  float scale_length = 100;
+  float total_mass = 4e6;
+  float scale_length = 18;
   float centre_x = WIDTH / 2.0;
   float centre_y = HEIGHT / 2.0;
-  float vel_x = 0;
-  float vel_y = 0;
+  float vel_x = 10;
+  float vel_y = 10;
   float temp = 0.05;
 
-  sim_init_galaxy(core->bodies, core->params, 0, core->bodies->count,
-                  total_mass, scale_length, centre_x, centre_y, vel_x, vel_y,
+  sim_init_galaxy(core->bodies, core->params, 0, core->bodies->count/2,
+                  total_mass, scale_length, centre_x - 40, centre_y - 40, vel_x, vel_y,
+                  temp);
+  sim_init_galaxy(core->bodies, core->params, core->bodies->count/2, core->bodies->count/2,
+                  total_mass/2, scale_length, centre_x + 40, centre_y + 40, 0, -vel_y,
                   temp);
 
   // sim_init_uniform(core->bodies, 0, 200, 0, 200, 2);
