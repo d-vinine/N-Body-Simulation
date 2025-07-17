@@ -8,16 +8,26 @@
 #define FPS 600
 
 void init_sim(const SimulationCore *core) {
-  float total_mass = 4e6;
-  float min_radius = 10;
+  float total_mass = 3e6;
+  float min_radius = 6;
   float max_radius = 80;
   float center_x = WIDTH / 2.0;
   float center_y = HEIGHT / 2.0;
   float vel_x = 0;
   float vel_y = 0;
 
-  sim_init_normal(core->bodies, core->params, 0, core->params.body_count,
-                  total_mass, 0.8, min_radius, max_radius, center_x, center_y,
+  sim_init_normal(core->bodies, core->params, 0, 10000,
+                  total_mass, 0.9, min_radius, max_radius, center_x, center_y,
+                  vel_x, vel_y);
+
+  total_mass /= 8;
+  min_radius /= 2;
+  max_radius /= 4;
+  center_y -= 120;
+  vel_x += 40;
+
+  sim_init_normal(core->bodies, core->params, 10000, 2000, 
+                  total_mass, 0.9, min_radius, max_radius, center_x, center_y,
                   vel_x, vel_y);
 
   // sim_init_uniform(core->bodies, 0, 200, 0, 200, 2);
@@ -25,7 +35,7 @@ void init_sim(const SimulationCore *core) {
 
 int main(void) {
   SimulationParams params = {
-      .body_count = 1e4, .G = 0.1, .eps = 0.7, .dt = 0.0001, .theta = 0.5};
+      .body_count = 1.2e4, .G = 0.1, .eps = 0.5, .dt = 0.001, .theta = 0.5};
 
   SimulationCore *core = sim_core_create(params, 1024);
   init_sim(core);
@@ -36,6 +46,7 @@ int main(void) {
   SetTargetFPS(FPS);
 
   while (!WindowShouldClose()) {
+    // handle camera movement
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
       Vector2 delta = GetMouseDelta();
       delta = Vector2Scale(delta, -1.0f / cam.zoom);
@@ -55,8 +66,10 @@ int main(void) {
       cam.zoom = Clamp(expf(logf(cam.zoom) + scale), 0.125f, 64.0f);
     }
 
+    // Simulation step
     sim_core_step(core);
 
+    // Drawing objects to screen
     BeginDrawing();
     ClearBackground((Color){15, 15, 25, 255});
 
@@ -69,6 +82,8 @@ int main(void) {
     EndDrawing();
   }
 
+  // Handling shutdown
+  
   CloseWindow();
   return 0;
 }

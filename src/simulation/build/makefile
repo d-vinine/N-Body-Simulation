@@ -11,6 +11,7 @@ SRCS := $(wildcard $(SRCDIR)*.c)
 OBJS := $(patsubst $(SRCDIR)%.c,$(OBJDIR)%.o,$(SRCS))
 
 $(OBJDIR)%.o: $(SRCDIR)%.c
+	@mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ 
 
 $(BIGOBJ): $(OBJS)

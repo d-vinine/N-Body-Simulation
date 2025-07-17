@@ -15,7 +15,7 @@ SIMOBJ := $(SIMBUILD)simulation.o
 MAINOBJ := $(OBJDIR)main.o
 EXEC := $(BUILDDIR)n-body-simulation
 
-THREADNUM := 10
+THREADNUM := 20
 
 .PHONY: all run clean
 
