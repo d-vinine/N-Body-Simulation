@@ -1,12 +1,16 @@
 # N-Body Simulation (Barnes-Hut Algorithm)
 
+
+https://github.com/user-attachments/assets/7181cef9-b278-4f51-992f-e84be87bd81c
+
+
 This project is a 2D N-body simulation that uses the **Barnes-Hut algorithm** to efficiently compute gravitational interactions between a large number of particles (up to ~100,000) in real time. It uses **Raylib** for rendering and visualization.
 
 
 ## Requirements
 
 - **C compiler** 
-- **Make** (optional, for building)
+- **Make** (for building)
 
 ## Barnes-Hut Algorithm (Brief Overview)
 
