@@ -21,124 +21,71 @@ void sim_init_uniform(BodyData *data, float min_x, float max_x, float min_y,
   }
 }
 
-void sim_init_central_mass(BodyData *data, int idx, float central_mass,
-                           float center_x, float center_y, float velocity_x,
-                           float velocity_y) {
-  data->x[idx] = center_x;
-  data->y[idx] = center_y;
-  data->vx[idx] = velocity_x;
-  data->vy[idx] = velocity_y;
-  data->mass[idx] = central_mass;
-  data->ax[idx] = 0.0f;
-  data->ay[idx] = 0.0f;
+float compute_enclosed_mass(float dist, float min_r, float max_r,
+                            float center_mass, float remaining_mass) {
+  float dist2 = dist * dist;
+  float min2 = min_r * min_r;
+  float max2 = max_r * max_r;
+
+  float frac = (dist2 - min2) / (max2 - min2);
+  if (frac < 0.0f)
+    frac = 0.0f;
+  if (frac > 1.0f)
+    frac = 1.0f;
+
+  return center_mass + remaining_mass * frac;
 }
 
-void sim_init_disk(BodyData *data, SimulationParams params, int start_idx,
-                   int count, float disk_mass, float scale_length,
-                   float center_x, float center_y, float velocity_x,
-                   float velocity_y, float temp, float central_mass,
-                   float bulge_mass, float bulge_scale) {
-  for (int i = 0; i < count; i++) {
-    int idx = start_idx + i;
-    float r, theta;
+void sim_init_normal(BodyData *data, SimulationParams params, int start_idx,
+                     int count, float total_mass, float center_mass_percent,
+                     float min_radius, float max_radius, float center_x,
+                     float center_y, float velocity_x, float velocity_y) {
 
-    // Rejection sampling for exponential disk profile
-    float u1, u2;
-    do {
-      u1 = (float)rand() / RAND_MAX;
-      u2 = (float)rand() / RAND_MAX;
-      r = -scale_length * logf(u1);
-    } while ((u2 > expf(-r / scale_length)) || (r < 0.1f));
+  float center_mass = total_mass * center_mass_percent;
+  float remaining_mass = total_mass - center_mass;
+  float body_mass = remaining_mass / (float)(count - 1);
 
-    theta = 2.0f * M_PI * ((float)rand() / RAND_MAX);
+  // Central mass
+  data->x[start_idx] = center_x;
+  data->y[start_idx] = center_y;
+  data->vx[start_idx] = velocity_x;
+  data->vy[start_idx] = velocity_y;
+  data->mass[start_idx] = center_mass;
 
-    data->x[idx] = center_x + r * cosf(theta);
-    data->y[idx] = center_y + r * sinf(theta);
-
-    // Enclosed mass includes disk, bulge, and central
-    float disk_enclosed = disk_mass * (1.0f - expf(-r / scale_length));
-    float bulge_enclosed = bulge_mass * (1.0f - expf(-r / bulge_scale));
-    float total_enclosed_mass = central_mass + disk_enclosed + bulge_enclosed;
-
-    float v_circ =
-        sqrtf(params.G * total_enclosed_mass / (r + 0.05f)); // softened
-
-    float sigma_r = temp * v_circ * 0.1f;
-    float sigma_t = temp * v_circ * 0.05f;
-
-    // Organized tangential motion with small dispersion
-    data->vx[idx] = velocity_x - v_circ * sinf(theta) +
-                    gaussian_random() * sigma_t * cosf(theta) +
-                    gaussian_random() * sigma_r * sinf(theta);
-    data->vy[idx] = velocity_y + v_circ * cosf(theta) +
-                    gaussian_random() * sigma_t * sinf(theta) +
-                    gaussian_random() * sigma_r * cosf(theta);
-
-    data->mass[idx] = disk_mass / count;
-    data->ax[idx] = 0.0f;
-    data->ay[idx] = 0.0f;
-  }
-}
-
-void sim_init_bulge(BodyData *data, SimulationParams params, int start_idx,
-                    int count, float bulge_mass, float scale_radius,
-                    float center_x, float center_y, float velocity_x,
-                    float velocity_y, float temp) {
-  for (int i = 0; i < count; i++) {
+  for (int i = 1; i < count; ++i) {
     int idx = start_idx + i;
 
-    // Sample radius from exponential (approx Hernquist)
-    float u = (float)rand() / RAND_MAX;
-    float r = -scale_radius * logf(u);
-    if (r < 0.05f)
-      r = 0.05f;
+    // Generate position using polar coordinates
+    float angle = ((float)rand() / RAND_MAX) * 2.0f * M_PI;
 
-    float theta = 2.0f * M_PI * ((float)rand() / RAND_MAX);
+    // Uniform distribution in annulus (area-wise, not just radius)
+    float t = (float)rand() / RAND_MAX;
+    float radius =
+        sqrtf(t * (max_radius * max_radius - min_radius * min_radius) +
+              min_radius * min_radius);
 
-    data->x[idx] = center_x + r * cosf(theta);
-    data->y[idx] = center_y + r * sinf(theta);
+    float x = center_x + radius * cosf(angle);
+    float y = center_y + radius * sinf(angle);
 
-    float sigma = temp * sqrtf(params.G * bulge_mass / (r + 0.05f));
+    data->x[idx] = x;
+    data->y[idx] = y;
+    data->mass[idx] = body_mass;
 
-    // Isotropic random motion (pressure supported)
-    data->vx[idx] = velocity_x + gaussian_random() * sigma;
-    data->vy[idx] = velocity_y + gaussian_random() * sigma;
+    // Radial vector
+    float dx = x - center_x;
+    float dy = y - center_y;
+    float dist = sqrtf(dx * dx + dy * dy);
 
-    data->mass[idx] = bulge_mass / count;
-    data->ax[idx] = 0.0f;
-    data->ay[idx] = 0.0f;
+    // Orbital velocity magnitude (around central mass)
+    float enclosed_mass = compute_enclosed_mass(dist, min_radius, max_radius,
+                                                center_mass, remaining_mass);
+    float v = sqrtf(params.G * enclosed_mass / dist);
+
+    // Tangential velocity
+    float vx = -v * dy / dist;
+    float vy = v * dx / dist;
+
+    data->vx[idx] = vx + velocity_x;
+    data->vy[idx] = vy + velocity_y;
   }
 }
-
-void sim_init_galaxy(BodyData *data, SimulationParams params, int start_idx,
-                     int count, float total_mass, float scale_length,
-                     float center_x, float center_y, float velocity_x,
-                     float velocity_y, float temp) {
-  float central_mass_fraction = 0.001f;
-  float central_mass = total_mass * central_mass_fraction;
-  float remaining_mass = total_mass * (1.0f - central_mass_fraction);
-
-  float visible_mass = remaining_mass * 0.05f;
-
-  int remaining_particles = count - 1;
-  int disk_particles = (int)(remaining_particles * 0.6f);
-  int bulge_particles = remaining_particles - disk_particles;
-
-  float disk_mass = visible_mass * 0.6f;
-  float bulge_mass = visible_mass * 0.4f;
-
-  int current_idx = start_idx;
-
-  sim_init_central_mass(data, current_idx++, central_mass, center_x, center_y,
-                        velocity_x, velocity_y);
-
-  sim_init_disk(data, params, current_idx, disk_particles, disk_mass,
-                scale_length, center_x, center_y, velocity_x, velocity_y, temp,
-                central_mass, bulge_mass, scale_length * 0.5f);
-  current_idx += disk_particles;
-
-  sim_init_bulge(data, params, current_idx, bulge_particles, bulge_mass,
-                 scale_length * 0.5f, center_x, center_y, velocity_x,
-                 velocity_y, temp);
-}
-

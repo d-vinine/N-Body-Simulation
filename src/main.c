@@ -1,6 +1,7 @@
-#include "simulation_core.h"
 #include "raylib.h"
 #include "raymath.h"
+#include "simulation/simulation_core.h"
+#include "simulation/simulation_interface.h"
 
 #define WIDTH 1024
 #define HEIGHT 1024
@@ -8,26 +9,23 @@
 
 void init_sim(const SimulationCore *core) {
   float total_mass = 4e6;
-  float scale_length = 18;
-  float centre_x = WIDTH / 2.0;
-  float centre_y = HEIGHT / 2.0;
-  float vel_x = 10;
-  float vel_y = 10;
-  float temp = 0.05;
+  float min_radius = 10;
+  float max_radius = 80;
+  float center_x = WIDTH / 2.0;
+  float center_y = HEIGHT / 2.0;
+  float vel_x = 0;
+  float vel_y = 0;
 
-  sim_init_galaxy(core->bodies, core->params, 0, core->bodies->count/2,
-                  total_mass, scale_length, centre_x - 40, centre_y - 40, vel_x, vel_y,
-                  temp);
-  sim_init_galaxy(core->bodies, core->params, core->bodies->count/2, core->bodies->count/2,
-                  total_mass/2, scale_length, centre_x + 40, centre_y + 40, 0, -vel_y,
-                  temp);
+  sim_init_normal(core->bodies, core->params, 0, core->params.body_count,
+                  total_mass, 0.8, min_radius, max_radius, center_x, center_y,
+                  vel_x, vel_y);
 
   // sim_init_uniform(core->bodies, 0, 200, 0, 200, 2);
 }
 
 int main(void) {
   SimulationParams params = {
-      .body_count = 5e4, .G = 0.1, .eps = 0.4, .dt = 0.002, .theta = 0.5};
+      .body_count = 1e4, .G = 0.1, .eps = 0.7, .dt = 0.0001, .theta = 0.5};
 
   SimulationCore *core = sim_core_create(params, 1024);
   init_sim(core);
@@ -64,7 +62,7 @@ int main(void) {
 
     BeginMode2D(cam);
     for (int i = 0; i < core->bodies->count; i++) {
-      Color particle_color = (Color){255, 233, 200, 10};
+      Color particle_color = (Color){255, 233, 200, 100};
       DrawPixel(core->bodies->x[i], core->bodies->y[i], particle_color);
     }
     EndMode2D();
